@@ -10,7 +10,11 @@
       "Bash(git checkout:*)",
       "Bash(git branch:*)",
       "Bash(npm install)",
-      "Bash(npm start)"
+      "Bash(npm start)",
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(git reset HEAD .env.development nul)",
+      "Bash(git reset:*)"
     ],
     "deny": [],
     "ask": []
