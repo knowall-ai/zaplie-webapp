@@ -14,7 +14,10 @@
       "Bash(git push:*)",
       "Bash(git add:*)",
       "Bash(git reset HEAD .env.development nul)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(git commit:*)",
+      "Bash(gh pr create:*)",
+      "Bash(git ls-tree:*)"
     ],
     "deny": [],
     "ask": []
