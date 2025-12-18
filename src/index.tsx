@@ -44,15 +44,12 @@ msalInstance.initialize().then(async () => {
   root.render(
     <MsalProvider instance={msalInstance}>
       <CacheProvider>
-      <Router>
-        <ThemeProvider theme={theme}>
-          <CacheProvider>
-          <App pca={msalInstance} />
-          </CacheProvider>
-        </ThemeProvider>
-      </Router>
-    </CacheProvider>,
+        <Router>
+          <ThemeProvider theme={theme}>
+            <App pca={msalInstance} />
+          </ThemeProvider>
+        </Router>
+      </CacheProvider>
     </MsalProvider>
-
   );
 });

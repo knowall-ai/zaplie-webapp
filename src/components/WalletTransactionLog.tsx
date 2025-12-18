@@ -246,10 +246,6 @@ const WalletTransactionLog: React.FC<WalletTransactionLogProps> = ({
   }, [activeTab, allTransactions]);
   
   const rewardNameContext = useContext(RewardNameContext);
-  if (!rewardNameContext) {
-    return null; // or handle the case where the context is not available
-  }
-const rewardsName = rewardNameContext.rewardName;
 
   if (loading) {
     return <div>Loading...</div>;
@@ -258,6 +254,11 @@ const rewardsName = rewardNameContext.rewardName;
   if (error) {
     return <div>{error}</div>;
   }
+
+  if (!rewardNameContext) {
+    return null; // or handle the case where the context is not available
+  }
+  const rewardsName = rewardNameContext.rewardName;
 
 
 

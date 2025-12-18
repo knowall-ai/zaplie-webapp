@@ -30,6 +30,9 @@ interface Wallet {
   inkey: string;
   balance_msat: number;
   deleted: boolean;
+  currency?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface User {

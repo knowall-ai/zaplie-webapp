@@ -2,7 +2,6 @@
 import {
   getAccessToken,
   getWallets,
-  getWalletBalance,
   getUserWallets,
   createInvoice,
   payInvoice

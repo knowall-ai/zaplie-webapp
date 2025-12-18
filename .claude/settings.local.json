@@ -17,7 +17,11 @@
       "Bash(git reset:*)",
       "Bash(git commit:*)",
       "Bash(gh pr create:*)",
-      "Bash(git ls-tree:*)"
+      "Bash(git ls-tree:*)",
+      "Bash(npx react-scripts start)",
+      "Bash(gh pr view:*)",
+      "Bash(gh api:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [],
     "ask": []

@@ -1,7 +1,6 @@
 import { Configuration, PopupRequest } from '@azure/msal-browser';
 const AADclientid = process.env.REACT_APP_AAD_CLIENT_ID as string;
 const TenantId = process.env.REACT_APP_TENANT_ID as string;
-console.log(AADclientid);
 
 // Config object to be passed to Msal on creation
 export const msalConfig: Configuration = {
