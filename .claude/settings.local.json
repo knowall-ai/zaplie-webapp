@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(npm run build:*)",
+      "Bash(git fetch:*)",
+      "Bash(git merge:*)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git checkout:*)",
+      "Bash(git branch:*)",
+      "Bash(npm install)",
+      "Bash(npm start)",
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(git reset HEAD .env.development nul)",
+      "Bash(git reset:*)",
+      "Bash(git commit:*)",
+      "Bash(gh pr create:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(npx react-scripts start)",
+      "Bash(gh pr view:*)",
+      "Bash(gh api:*)",
+      "mcp__ide__getDiagnostics"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
