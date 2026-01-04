@@ -15,9 +15,12 @@ on:
 jobs:
   claude-review:
     # Only run on PR comments (not issue comments) with trigger phrase, or on manual dispatch
+    # For issue_comment trigger, restrict to authorized users (OWNER, MEMBER, COLLABORATOR)
     if: |
       github.event_name == 'workflow_dispatch' ||
-      (github.event.issue.pull_request && contains(github.event.comment.body, '/claude-review'))
+      (github.event.issue.pull_request &&
+       contains(github.event.comment.body, '/claude-review') &&
+       contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association))
 
     runs-on: ubuntu-latest
     permissions:
