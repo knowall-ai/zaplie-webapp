@@ -26,7 +26,7 @@ const readData = () => {
 };
 
 // Function to write data to the JSON file
-const writeData = (data) => {
+const writeData = data => {
   try {
     fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2));
   } catch (error) {
@@ -50,7 +50,10 @@ app.post('/api/reward-name', (req, res) => {
     const data = readData();
     data.rewardName = newRewardName;
     writeData(data);
-    res.send({ message: 'Reward name updated successfully', rewardName: data.rewardName });
+    res.send({
+      message: 'Reward name updated successfully',
+      rewardName: data.rewardName,
+    });
   } else {
     res.status(400).send({ message: 'Invalid reward name' });
   }
