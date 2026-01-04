@@ -35,5 +35,5 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'no-console': 'warn',
   },
-  ignorePatterns: ['build/', 'node_modules/', '*.config.js'],
+  ignorePatterns: ['build/', 'node_modules/', '/*.config.js'],
 };

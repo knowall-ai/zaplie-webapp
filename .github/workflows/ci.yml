@@ -53,7 +53,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [lint, format]
+    needs: [lint, format, typecheck]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -70,6 +70,8 @@ jobs:
       - name: Build application
         run: npm run build
         env:
+          # CI=false prevents React from treating warnings as errors
+          # This is necessary because react-scripts exits with error on any warning in CI mode
           CI: false
 
       - name: Upload build artifacts
