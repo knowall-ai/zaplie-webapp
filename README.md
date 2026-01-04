@@ -47,6 +47,34 @@ The page will reload when you make changes.
 
 You may also see any lint errors in the console.
 
+### Linting
+
+Run ESLint to check for code quality issues:
+
+```
+npm run lint
+```
+
+To automatically fix linting issues:
+
+```
+npm run lint:fix
+```
+
+### Formatting
+
+Check if code is properly formatted with Prettier:
+
+```
+npm run format:check
+```
+
+To automatically format all files:
+
+```
+npm run format
+```
+
 ### Testing
 
 To run the app in the interactive watch mode, run:
@@ -66,3 +94,16 @@ This builds the app for production to the `build` folder. It correctly bundles R
 The build is minified and the filenames include the hashes. Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+## CI/CD
+
+This project uses GitHub Actions for continuous integration. On every push and pull request to `main`, the following checks are automatically run:
+
+| Check | Description |
+|-------|-------------|
+| **Lint** | ESLint checks for code quality issues |
+| **Format** | Prettier formatting verification |
+| **TypeScript** | Type checking with `tsc --noEmit` |
+| **Build** | Verifies the application builds successfully |
+
+All checks must pass before merging pull requests.
