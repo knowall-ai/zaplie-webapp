@@ -38,7 +38,11 @@
     "client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint src/ --ext .ts,.tsx,.js,.jsx --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\""
   },
   "eslintConfig": {
     "extends": [
@@ -65,7 +69,14 @@
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
     "@types/react-qr-reader": "^2.1.7",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "concurrently": "^9.1.2",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.2.5",
     "ts-loader": "^9.5.1",
     "typescript": "^4.9.5"
   }
