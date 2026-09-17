@@ -1,5 +1,7 @@
 # Getting Started with Zaplie React App
 
+[![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/knowall-ai/zaplie-webapp?label=CodeRabbit+Reviews&labelColor=171717&color=FF570A)](https://coderabbit.ai)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Proxy
