@@ -31,22 +31,41 @@ export const getIdToken = async (
   return result.idToken;
 };
 
+export type TenantCheckResult = 'approved' | 'denied' | 'error';
+
+// Upper bound on the whole check (token + request), so the gate never hangs.
+const TENANT_CHECK_DEADLINE_MS = 10000;
+
 /**
  * Asks the server whether the signed-in user's organisation is approved.
- * Anything other than an explicit approval (403, 401, 503, network error)
- * counts as not approved.
+ * 'denied' is the server's verified answer (401/403). 'error' covers anything
+ * transient (token, network, 5xx, deadline) and is also not an approval, but
+ * callers may retry it.
  */
 export const checkTenantAccess = async (
   account?: AccountInfo | null,
-): Promise<boolean> => {
+): Promise<TenantCheckResult> => {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const deadline = new Promise<TenantCheckResult>(resolve => {
+    timer = setTimeout(() => resolve('error'), TENANT_CHECK_DEADLINE_MS);
+  });
+  const check = (async (): Promise<TenantCheckResult> => {
+    try {
+      const idToken = await getIdToken(account);
+      const response = await axios.get(`${API_URL}/tenant-access`, {
+        headers: { Authorization: `Bearer ${idToken}` },
+        timeout: TENANT_CHECK_DEADLINE_MS,
+      });
+      return response.data?.approved === true ? 'approved' : 'denied';
+    } catch (error) {
+      const status = axios.isAxiosError(error) ? error.response?.status : 0;
+      return status === 401 || status === 403 ? 'denied' : 'error';
+    }
+  })();
   try {
-    const idToken = await getIdToken(account);
-    const response = await axios.get(`${API_URL}/tenant-access`, {
-      headers: { Authorization: `Bearer ${idToken}` },
-    });
-    return response.data?.approved === true;
-  } catch {
-    return false;
+    return await Promise.race([check, deadline]);
+  } finally {
+    clearTimeout(timer);
   }
 };
 

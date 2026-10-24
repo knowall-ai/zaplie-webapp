@@ -30,7 +30,7 @@ const TenantGate: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <TenantNotApproved
         organisationName={access.organisationName}
         tenantId={access.tenantId}
-        email={account.username || null}
+        account={account}
       />
     );
   }

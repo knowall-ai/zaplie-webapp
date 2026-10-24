@@ -43,7 +43,10 @@ const isTenantApproved = (tid, approvedTenantIds) => {
  * client id) and that the issuer matches the token's own tenant.
  */
 const verifyIdToken = async (token, { clientId, keySet }) => {
-  const { payload } = await jwtVerify(token, keySet, { audience: clientId });
+  const { payload } = await jwtVerify(token, keySet, {
+    audience: clientId,
+    algorithms: ['RS256'], // Entra signs ID tokens with RS256
+  });
   const tenantId = normaliseTenantId(payload.tid);
   if (
     tenantId &&

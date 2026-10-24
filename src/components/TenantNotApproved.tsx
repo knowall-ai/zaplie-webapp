@@ -1,4 +1,5 @@
 import React from 'react';
+import { AccountInfo } from '@azure/msal-browser';
 import { useTeamsAuth } from '../hooks/useTeamsAuth';
 import {
   ACCESS_REQUEST_EMAIL,
@@ -12,7 +13,7 @@ const APP_NAME = 'Zaplie';
 type Props = {
   organisationName: string | null;
   tenantId: string | null;
-  email: string | null;
+  account: AccountInfo;
 };
 
 /**
@@ -23,14 +24,14 @@ type Props = {
 const TenantNotApproved: React.FC<Props> = ({
   organisationName,
   tenantId,
-  email,
+  account,
 }) => {
   const { handleLogout, isLoggingOut } = useTeamsAuth();
   const mailto = buildAccessRequestMailto({
     appName: APP_NAME,
     organisationName,
     tenantId,
-    email,
+    email: account.username || null,
   });
 
   return (
@@ -76,7 +77,7 @@ const TenantNotApproved: React.FC<Props> = ({
         <button
           type="button"
           className={styles.signOut}
-          onClick={() => handleLogout()}
+          onClick={() => handleLogout(account)}
           disabled={isLoggingOut}
         >
           {isLoggingOut ? 'Signing out...' : 'Sign out'}

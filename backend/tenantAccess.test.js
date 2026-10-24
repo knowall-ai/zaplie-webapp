@@ -13,6 +13,13 @@ const {
 } = require('./tenantAccess');
 const { createApp } = require('./app');
 
+// Await close (and drop keep-alive sockets) so the test process exits promptly.
+const closeServer = server =>
+  new Promise(resolve => {
+    server.closeAllConnections?.();
+    server.close(() => resolve());
+  });
+
 const CLIENT_ID = '11111111-2222-3333-4444-555555555555';
 const APPROVED_CUSTOMER = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
 const UNAPPROVED = '99999999-8888-7777-6666-555555555555';
@@ -89,7 +96,7 @@ describe('API routes behind the tenant gate', () => {
     baseUrl = `http://127.0.0.1:${server.address().port}`;
   });
 
-  after(() => server.close());
+  after(() => closeServer(server));
 
   test('a KnowAll user (including B2B guests, whose tid is KnowAll) passes', async () => {
     const token = await idToken({ tid: KNOWALL_TENANT_ID, oid: 'guest' });
@@ -191,7 +198,7 @@ describe('API routes behind the tenant gate', () => {
       );
       assert.equal(res.status, 503);
     } finally {
-      app.close();
+      await closeServer(app);
     }
   });
 });
