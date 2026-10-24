@@ -46,6 +46,6 @@ describe('buildAccessRequestMailto', () => {
     expect(body).toContain('App: Zaplie');
     expect(body).toContain('Organisation: Contoso Ltd');
     expect(body).toContain('Tenant ID: 99999999-8888-7777-6666-555555555555');
-    expect(body).toContain('Requested by: ada@contoso.com');
+    expect(body).toContain('Email: ada@contoso.com');
   });
 });

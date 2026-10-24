@@ -39,13 +39,13 @@ const TenantNotApproved: React.FC<Props> = ({
       <img className={styles.image} src={heroImage} alt="" aria-hidden />
       <div className={styles.shade} />
       <section className={styles.content} aria-labelledby="not-approved-title">
-        <p className={styles.eyebrow}>{APP_NAME}</p>
+        <p className={styles.eyebrow}>Awaiting approval</p>
         <h1 id="not-approved-title" className={styles.title}>
           Your organisation isn't set up on {APP_NAME} yet.
         </h1>
         <p className={styles.lede}>
           {APP_NAME} is open to organisations KnowAll has approved. Get in touch
-          and we'll get your team zapping.
+          and we'll set yours up.
         </p>
 
         <div className={styles.actions}>

@@ -135,9 +135,7 @@ test('an unapproved tenant gets the not-yet-approved page and no app data', asyn
   expect(url.pathname).toBe('hello@knowall.ai');
   expect(url.searchParams.get('subject')).toBe('Zaplie access request');
   expect(url.searchParams.get('body')).toContain('Organisation: Contoso Ltd');
-  expect(url.searchParams.get('body')).toContain(
-    'Requested by: ada@contoso.com',
-  );
+  expect(url.searchParams.get('body')).toContain('Email: ada@contoso.com');
 
   expect(link('hello@knowall.ai')).toHaveAttribute(
     'href',

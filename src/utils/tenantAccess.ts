@@ -49,9 +49,9 @@ export const buildAccessRequestMailto = ({
     `App: ${appName}`,
     `Organisation: ${organisationName || 'Unknown'}`,
     `Tenant ID: ${tenantId || 'Unknown'}`,
-    `Requested by: ${email || 'Unknown'}`,
+    `Email: ${email || 'Unknown'}`,
     '',
-    'Thanks',
+    'Thank you',
   ].join('\r\n');
   return `mailto:${ACCESS_REQUEST_EMAIL}?subject=${encodeURIComponent(
     subject,
