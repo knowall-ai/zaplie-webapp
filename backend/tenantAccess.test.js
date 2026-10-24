@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { SignJWT, generateKeyPair } = require('jose');
+const { SignJWT, generateKeyPair, errors } = require('jose');
 const {
   KNOWALL_TENANT_ID,
   parseApprovedTenantIds,
@@ -53,6 +53,7 @@ describe('API routes behind the tenant gate', () => {
   let server;
   let baseUrl;
   let privateKey;
+  let publicKey;
   let otherPrivateKey;
   let dataFilePath;
 
@@ -80,6 +81,7 @@ describe('API routes behind the tenant gate', () => {
   before(async () => {
     const keys = await generateKeyPair('RS256');
     privateKey = keys.privateKey;
+    publicKey = keys.publicKey;
     otherPrivateKey = (await generateKeyPair('RS256')).privateKey;
     dataFilePath = path.join(
       fs.mkdtempSync(path.join(os.tmpdir(), 'zaplie-')),
@@ -185,6 +187,63 @@ describe('API routes behind the tenant gate', () => {
       headers: { Authorization: 'your-secret-token' },
     });
     assert.equal(res.status, 200);
+  });
+
+  // A gate whose key set behaves like jose's remote JWKS in the given way.
+  const statusWithKeySet = async keySet => {
+    const gate = createTenantGate({
+      clientId: CLIENT_ID,
+      approvedTenantIds: parseApprovedTenantIds(APPROVED_CUSTOMER),
+      keySet,
+    });
+    const app = createApp({ tenantGate: gate, dataFilePath }).listen(0);
+    try {
+      const token = await idToken({ tid: KNOWALL_TENANT_ID });
+      const res = await fetch(
+        `http://127.0.0.1:${app.address().port}/api/tenant-access`,
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      return res.status;
+    } finally {
+      await closeServer(app);
+    }
+  };
+
+  test('a JWKS timeout is 503 (retryable), not a denial', async () => {
+    const status = await statusWithKeySet(async () => {
+      throw new errors.JWKSTimeout();
+    });
+    assert.equal(status, 503);
+  });
+
+  test('a non-200 or invalid JWKS response is 503', async () => {
+    const status = await statusWithKeySet(async () => {
+      throw new errors.JOSEError(
+        'Expected 200 OK from the JSON Web Key Set HTTP response',
+      );
+    });
+    assert.equal(status, 503);
+  });
+
+  test('a network error fetching the JWKS is 503', async () => {
+    const status = await statusWithKeySet(async () => {
+      throw Object.assign(new Error('getaddrinfo ENOTFOUND'), {
+        code: 'ENOTFOUND',
+      });
+    });
+    assert.equal(status, 503);
+  });
+
+  test('a token whose key is not in the JWKS is still 401', async () => {
+    const status = await statusWithKeySet(async () => {
+      throw new errors.JWKSNoMatchingKey();
+    });
+    assert.equal(status, 401);
+  });
+
+  test('a working remote-style key set still verifies the token', async () => {
+    const status = await statusWithKeySet(async () => publicKey);
+    assert.equal(status, 200);
   });
 
   test('the gate fails closed when no AAD client id is configured', async () => {
