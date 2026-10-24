@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { MsalProvider } from '@azure/msal-react';
 import { IPublicClientApplication } from '@azure/msal-browser';
 import RequireAuth from './components/RequireAuth';
+import TenantGate from './components/TenantGate';
 
 // Sample app imports
 import { PageLayout } from './components/PageLayout';
@@ -69,56 +70,58 @@ function App({ pca }: AppProps) {
           pauseOnHover
           theme="dark"
         />
-        <PageLayout>
-          <Stack horizontalAlign="center">
-            <Routes>
-              <Route
-                path="/feed"
-                element={
-                  <RequireAuth>
-                    <Feed />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/users"
-                element={
-                  <RequireAuth>
-                    <Users />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/rewards"
-                element={
-                  <RequireAuth>
-                    <Rewards />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/wallet"
-                element={
-                  <RequireAuth>
-                    <Wallet />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/settings"
-                element={
-                  <RequireAuth>
-                    <Settings />
-                  </RequireAuth>
-                }
-              />
-              <Route path="/login" element={<Login />} />
-              <Route path="/auth-start" element={<AuthStart />} />
-              <Route path="/auth-end" element={<AuthEnd />} />
-              <Route path="*" element={<Navigate to="/feed" replace />} />
-            </Routes>
-          </Stack>
-        </PageLayout>
+        <TenantGate>
+          <PageLayout>
+            <Stack horizontalAlign="center">
+              <Routes>
+                <Route
+                  path="/feed"
+                  element={
+                    <RequireAuth>
+                      <Feed />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/users"
+                  element={
+                    <RequireAuth>
+                      <Users />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/rewards"
+                  element={
+                    <RequireAuth>
+                      <Rewards />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/wallet"
+                  element={
+                    <RequireAuth>
+                      <Wallet />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/settings"
+                  element={
+                    <RequireAuth>
+                      <Settings />
+                    </RequireAuth>
+                  }
+                />
+                <Route path="/login" element={<Login />} />
+                <Route path="/auth-start" element={<AuthStart />} />
+                <Route path="/auth-end" element={<AuthEnd />} />
+                <Route path="*" element={<Navigate to="/feed" replace />} />
+              </Routes>
+            </Stack>
+          </PageLayout>
+        </TenantGate>
       </RewardNameProvider>
     </MsalProvider>
   );
