@@ -25,8 +25,21 @@ jobs:
           node-version: '20.x'
 
       - name: npm ci and build
+        # Create React App bakes REACT_APP_* in at build time (and `npm run build`
+        # doesn't read .env.development), so the sign-in settings have to be here.
+        # Same secrets as the production workflow; a Test environment secret of
+        # the same name overrides the repository one
         env:
           CI: false
+          REACT_APP_LNBITS_NODE_URL: ${{ secrets.REACT_APP_LNBITS_NODE_URL }}
+          REACT_APP_LNBITS_USERNAME: ${{ secrets.REACT_APP_LNBITS_USERNAME }}
+          REACT_APP_LNBITS_PASSWORD: ${{ secrets.REACT_APP_LNBITS_PASSWORD }}
+          REACT_APP_LNBITS_ADMINKEY: ${{ secrets.REACT_APP_LNBITS_ADMINKEY }}
+          REACT_APP_LNBITS_STORE_ID: ${{ secrets.REACT_APP_LNBITS_STORE_ID }}
+          REACT_APP_LNBITS_STORE_OWNER_EMAIL: ${{ secrets.REACT_APP_LNBITS_STORE_OWNER_EMAIL }}
+          REACT_APP_TENANT_ID: ${{ secrets.REACT_APP_TENANT_ID }}
+          REACT_APP_AAD_CLIENT_ID: ${{ secrets.REACT_APP_AAD_CLIENT_ID }}
+          REACT_APP_LNBITS_POINTS_LABEL: ${{ secrets.REACT_APP_LNBITS_POINTS_LABEL }}
         run: |
           npm ci
           npm run build
