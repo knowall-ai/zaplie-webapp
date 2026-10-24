@@ -118,6 +118,17 @@ The build is minified and the filenames include the hashes. Your app is ready to
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+The deploy workflows (`.github/workflows/Azure_App_Service_zaplie-*.yml`) build from the repo root and stage a `deploy/` package with `scripts/stage-deploy.js`: `build/`, `backend/`, `web.config` (iisnode runs `backend/server.js`) and only the server's runtime packages, including `jose`.
+
+**Before deploying**, both of these application settings must exist on the App Service (and each deployment slot):
+
+| Setting | Value |
+| --- | --- |
+| `AAD_CLIENT_ID` | The app registration's client ID (the same value as `REACT_APP_AAD_CLIENT_ID`). The server verifies ID tokens against it. |
+| `APPROVED_TENANT_IDS` | Comma-separated tenant GUIDs of the approved organisations (KnowAll's own tenant is always approved). |
+
+Without `AAD_CLIENT_ID` (the server also accepts a `REACT_APP_AAD_CLIENT_ID` app setting) the tenant gate can't verify anyone, so `GET /api/tenant-access` and `POST /api/reward-name` return 503. Without `APPROVED_TENANT_IDS`, only KnowAll's tenant can sign in.
+
 ## CI/CD
 
 This project uses GitHub Actions for continuous integration. On every push and pull request to `main`, the following checks are automatically run:
