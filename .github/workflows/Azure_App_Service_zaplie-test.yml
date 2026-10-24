@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     environment: Test
     permissions:
       contents: read #This is required for actions/checkout
@@ -24,19 +24,28 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: npm install, build, and test
+      - name: npm ci and build
         env:
           CI: false
         run: |
-          cd tabs
-          npm install
-          npm run build --if-present
-      
+          npm ci
+          npm run build
+
+      # The App Service (Windows, iisnode via web.config) runs backend/server.js
+      # and serves build/. Stage those with only the server's runtime packages
+      # (express, cors, body-parser, jose) rather than the whole repo
+      - name: Stage the deploy package
+        run: |
+          node scripts/stage-deploy.js
+          cd deploy
+          npm install --omit=dev --no-audit --no-fund
+          node -e "require('jose'); require('./backend/app')"
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: tabs
+          path: deploy
 
   deploy:
     runs-on: ubuntu-latest
