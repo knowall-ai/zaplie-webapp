@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useMsal } from '@azure/msal-react';
-import { InteractionStatus } from '@azure/msal-browser';
+import { AccountInfo, InteractionStatus } from '@azure/msal-browser';
 import * as microsoftTeams from '@microsoft/teams-js';
 import { toast } from 'react-toastify';
 import { clearApiCache } from '../services/lnbitsServiceLocal';
@@ -8,7 +8,7 @@ import { clearApiCache } from '../services/lnbitsServiceLocal';
 interface UseTeamsAuthReturn {
   isInTeams: boolean;
   isTeamsInitializing: boolean;
-  handleLogout: () => Promise<void>;
+  handleLogout: (account?: AccountInfo | null) => Promise<void>;
   isLoggingOut: boolean;
 }
 
@@ -55,32 +55,37 @@ export const useTeamsAuth = (): UseTeamsAuthReturn => {
     };
   }, []);
 
-  const handleLogout = useCallback(async () => {
-    // Check if MSAL has an interaction in progress
-    if (inProgress !== InteractionStatus.None) {
-      return;
-    }
+  // Pass the account to sign out of a specific one (e.g. the account shown on
+  // the not-yet-approved page); defaults to the first signed-in account.
+  const handleLogout = useCallback(
+    async (account?: AccountInfo | null) => {
+      // Check if MSAL has an interaction in progress
+      if (inProgress !== InteractionStatus.None) {
+        return;
+      }
 
-    // Use ref to prevent race conditions in concurrent React mode
-    if (logoutInProgressRef.current) return;
-    logoutInProgressRef.current = true;
-    setIsLoggingOut(true);
+      // Use ref to prevent race conditions in concurrent React mode
+      if (logoutInProgressRef.current) return;
+      logoutInProgressRef.current = true;
+      setIsLoggingOut(true);
 
-    try {
-      // Clear API cache before logout to prevent stale data on re-login
-      clearApiCache();
+      try {
+        // Clear API cache before logout to prevent stale data on re-login
+        clearApiCache();
 
-      await instance.logoutPopup({
-        postLogoutRedirectUri: window.location.origin + '/login',
-        account: accounts[0] || null,
-      });
-    } catch (error) {
-      toast.error('Failed to sign out. Please try again.');
-    } finally {
-      logoutInProgressRef.current = false;
-      setIsLoggingOut(false);
-    }
-  }, [instance, accounts, inProgress]);
+        await instance.logoutPopup({
+          postLogoutRedirectUri: window.location.origin + '/login',
+          account: account || accounts[0] || null,
+        });
+      } catch (error) {
+        toast.error('Failed to sign out. Please try again.');
+      } finally {
+        logoutInProgressRef.current = false;
+        setIsLoggingOut(false);
+      }
+    },
+    [instance, accounts, inProgress],
+  );
 
   return {
     isInTeams,
