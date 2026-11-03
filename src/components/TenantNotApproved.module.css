@@ -1,0 +1,198 @@
+.hero {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  background-color: #111111;
+  color: #ffffff;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 80% center;
+}
+
+/* Dark gradient behind the text so it stays readable over the robot. */
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(10, 10, 10, 0.96) 0%,
+    rgba(10, 10, 10, 0.9) 34%,
+    rgba(10, 10, 10, 0.45) 58%,
+    rgba(10, 10, 10, 0) 78%
+  );
+}
+
+.content {
+  position: relative;
+  max-width: 600px;
+  margin-left: clamp(24px, 8vw, 128px);
+  padding: 48px 0;
+}
+
+.eyebrow {
+  margin: 0 0 16px;
+  color: #84cc16;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(34px, 4.4vw, 60px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.lede {
+  margin: 20px 0 0;
+  max-width: 480px;
+  color: #d8d8d8;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+  margin-top: 36px;
+}
+
+.primary {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 6px;
+  background-color: #84cc16;
+  color: #111111;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.primary:hover,
+.primary:focus-visible {
+  background-color: #6ba513;
+  color: #111111;
+  text-decoration: none;
+}
+
+.primary:focus-visible,
+.emailLink:focus-visible,
+.signOut:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+.alternative {
+  color: #d8d8d8;
+  font-size: 16px;
+}
+
+.emailLink,
+.emailLink:hover,
+.emailLink:visited {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  margin: 40px 0 0;
+  color: #8a8a8a;
+  font-size: 13px;
+}
+
+.details dt {
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+}
+
+.details dd {
+  margin: 2px 0 0;
+  color: #a6a6a6;
+  font-family: Consolas, 'Courier New', monospace;
+  word-break: break-all;
+}
+
+.signOut {
+  /* The app's global styles stretch buttons to full width. */
+  display: block;
+  width: auto;
+  margin-top: 28px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #a6a6a6;
+  font: inherit;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.signOut:hover {
+  color: #ffffff;
+}
+
+.signOut:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Phones: robot on top, text on a solid dark panel underneath. */
+@media (max-width: 720px) {
+  .hero {
+    align-items: flex-end;
+  }
+
+  .image {
+    height: 58%;
+    object-position: 82% 20%;
+  }
+
+  .shade {
+    background: linear-gradient(
+      180deg,
+      rgba(10, 10, 10, 0) 0%,
+      rgba(10, 10, 10, 0.15) 26%,
+      rgba(10, 10, 10, 0.88) 40%,
+      #0a0a0a 52%
+    );
+  }
+
+  .content {
+    margin: 0;
+    padding: 45vh 24px 40px;
+  }
+
+  .lede {
+    font-size: 16px;
+  }
+
+  .primary {
+    width: 100%;
+    text-align: center;
+  }
+}

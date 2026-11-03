@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {
-  PublicClientApplication,
   EventType,
   EventMessage,
   AuthenticationResult,
@@ -11,10 +10,10 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from '@fluentui/react';
 import { theme } from './styles/Theme'; // Adjust the import path as necessary
 import App from './App'; // Adjust the import path as necessary
-import { msalConfig } from './services/authConfig';
+import { msalInstance } from './services/msalInstance';
 import { CacheProvider } from './utils/CacheContext';
 
-export const msalInstance = new PublicClientApplication(msalConfig);
+export { msalInstance };
 
 msalInstance.initialize().then(async () => {
   // Handle redirect promise BEFORE rendering the app
