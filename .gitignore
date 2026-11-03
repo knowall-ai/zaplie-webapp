@@ -14,7 +14,10 @@
 
 # misc
 .DS_Store
+# Local env files: never commit real values (only *.example files)
 .env
+.env.*
+!.env.*.example
 .env.local
 .env.Test
 .env.Prod
